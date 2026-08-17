@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Town — Grant Discovery Intake</title>
+<style>
+  :root {
+    --navy: #1c2b3a;
+    --navy-light: #2e4258;
+    --accent: #3f7a5e;
+    --accent-light: #e8f1ec;
+    --gold: #b8863a;
+    --bg: #f6f4ef;
+    --card: #ffffff;
+    --border: #dde1e2;
+    --text: #24313d;
+    --text-muted: #647184;
+    --danger: #b3462c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  header {
+    background: var(--navy);
+    color: #fff;
+    padding: 28px 40px;
+  }
+  header h1 {
+    margin: 0 0 4px 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+  }
+  header p {
+    margin: 0;
+    color: #b7c2cd;
+    font-size: 0.92rem;
+  }
+  .layout {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 24px 64px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px 32px;
+  }
+  .card h2 {
+    margin-top: 0;
+    font-size: 1.15rem;
+    color: var(--navy);
+    border-bottom: 2px solid var(--accent-light);
+    padding-bottom: 10px;
+    margin-bottom: 22px;
+  }
+  .field-note {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin: -14px 0 20px 0;
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .field {
+    margin-bottom: 18px;
+  }
+  label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.88rem;
+    margin-bottom: 6px;
+    color: var(--navy-light);
+  }
+  .tag {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    padding: 1px 7px;
+    border-radius: 10px;
+    margin-left: 8px;
+    vertical-align: middle;
+    text-transform: uppercase;
+  }
+  .tag-hard { background: #fbe9e3; color: var(--danger); }
+  .tag-soft { background: var(--accent-light); color: var(--accent); }
+  .tag-meta { background: #eef0f2; color: var(--text-muted); }
+  select, input[type="text"], input[type="email"], input[type="number"], textarea {
+    width: 100%;
+    padding: 9px 11px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.92rem;
+    font-family: inherit;
+    background: #fff;
+    color: var(--text);
+  }
+  select:focus, input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-light);
+  }
+  textarea {
+    resize: vertical;
+    min-height: 90px;
+  }
+  .hint {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+  .error-text {
+    font-size: 0.78rem;
+    color: var(--danger);
+    margin-top: 4px;
+    display: none;
+  }
+  .field.invalid select,
+  .field.invalid input,
+  .field.invalid textarea {
+    border-color: var(--danger);
+  }
+  .field.invalid .error-text { display: block; }
+
+  .confirm-box {
+    background: var(--accent-light);
+    border: 1px dashed var(--accent);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 0.88rem;
+    margin-top: 10px;
+    display: none;
+  }
+  .confirm-box.show { display: block; }
+  .confirm-box strong { color: var(--navy); }
+
+  .submit-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 8px;
+  }
+  button.primary {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 11px 26px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button.primary:hover { background: #366851; }
+  button.secondary {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    cursor: pointer;
+  }
+  button.secondary:hover { background: #f0f0ee; }
+  .status-msg {
+    font-size: 0.85rem;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  th, td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  th {
+    background: #f0efe9;
+    color: var(--navy-light);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  tr:last-child td { border-bottom: none; }
+  .empty-state {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    padding: 24px 0;
+    text-align: center;
+  }
+  .badge-count {
+    background: var(--navy);
+    color: #fff;
+    border-radius: 12px;
+    padding: 2px 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+  .card-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--accent-light);
+    padding-bottom: 10px;
+    margin-bottom: 18px;
+  }
+  .card-header-row h2 { border: none; margin: 0; padding: 0; }
+  .table-wrap { overflow-x: auto; }
+  .mock-banner {
+    background: #fff8e8;
+    border: 1px solid var(--gold);
+    color: #6b4d1a;
+    font-size: 0.8rem;
+    padding: 8px 14px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+  }
+  .action-link {
+    color: var(--accent);
+    font-size: 0.8rem;
+    cursor: pointer;
+    text-decoration: underline;
+    background: none;
+    border: none;
+    padding: 0;
+    font-weight: 600;
+  }
+  details summary {
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--navy-light);
+    font-weight: 600;
+  }
+  details pre {
+    background: #f6f4ef;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px;
+    font-size: 0.75rem;
+    overflow-x: auto;
+    white-space: pre-wrap;
+  }
+
+  .grant-result {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+  }
+  .grant-result h3 {
+    margin: 0 0 6px 0;
+    font-size: 0.98rem;
+    color: var(--navy);
+  }
+  .grant-result .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .grant-result .meta-row span strong { color: var(--text); }
+  .pill {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    text-transform: uppercase;
+  }
+  .pill-posted { background: var(--accent-light); color: var(--accent); }
+  .pill-forecasted { background: #fff2df; color: var(--gold); }
+  .pill-source-cat { background: #eaf0fa; color: #2c5aa0; }
+  .pill-source-kw { background: #f3ecf9; color: #7a4fa0; }
+  .amount-row {
+    font-size: 0.82rem;
+    margin-top: 8px;
+    color: var(--navy-light);
+  }
+  .spinner-text {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+  .warn-box {
+    background: #fbe9e3;
+    border: 1px solid var(--danger);
+    color: #7a2e1a;
+    font-size: 0.85rem;
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-bottom: 14px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Our Town — Grant Discovery Intake</h1>
+  <p>Tell us about your community and project. This information is used to search and score matching federal grant opportunities.</p>
+</header>
+
+<div class="layout">
+
+  <div class="card">
+    <div class="mock-banner">
+      Prototype dashboard. Submissions are stored in this browser tab only (no backend/database) and reset on reload. Grant discovery below runs a <strong>live</strong> search directly against the public grants.gov <code>search2</code> API — real results, no API key required. It does not run eligibility/rationale scoring (no LLM call from the browser); that step happens later in the Cowork pipeline. Field set matches profile schema v0.1 (10 core fields).
+    </div>
+
+    <h2>Community &amp; Project Profile</h2>
+
+    <form id="intakeForm" novalidate>
+
+      <div class="grid-2">
+        <div class="field" id="field-entity_type">
+          <label for="entity_type">Entity type <span class="tag tag-hard">Hard filter</span></label>
+          <select id="entity_type" name="entity_type" required>
+            <option value="" disabled selected>Select the type that best describes you...</option>
+            <option value="city_township_government">City / township government</option>
+            <option value="county_government">County government</option>
+            <option value="state_government">State government</option>
+            <option value="tribal_government">Federally recognized tribal government</option>
+            <option value="special_district">Special district (utility / economic-dev authority)</option>
+            <option value="nonprofit_501c3">Nonprofit (501(c)(3))</option>
+            <option value="nonprofit_other">Nonprofit (other)</option>
+            <option value="small_business">Small business</option>
+            <option value="other_for_profit">Other for-profit</option>
+            <option value="cooperative">Cooperative</option>
+            <option value="public_housing_authority">Public housing authority</option>
+            <option value="educational_institution">Educational institution</option>
+            <option value="individual">Individual</option>
+          </select>
+          <div class="hint">Legal applicant class — the single most important eligibility gate.</div>
+          <div class="error-text">Please select an entity type.</div>
+        </div>
+
+        <div class="field" id="field-funding_category">
+          <label for="funding_category">Funding category <span class="tag tag-hard">Hard filter</span></label>
+          <select id="funding_category" name="funding_category" required>
+            <option value="" disabled selected>Select the closest category...</option>
+            <option value="agriculture">Agriculture</option>
+            <option value="business_commerce">Business &amp; commerce</option>
+            <option value="community_development">Community development</option>
+            <option value="energy">Energy</option>
+            <option value="environment">Environment</option>
+            <option value="housing">Housing</option>
+            <option value="regional_development">Regional development</option>
+            <option value="science_technology">Science &amp; technology</option>
+            <option value="transportation">Transportation</option>
+            <option value="income_security_social_services">Income security / social services</option>
+            <option value="disaster_prevention_relief">Disaster prevention &amp; relief</option>
+          </select>
+          <div class="hint">Coarse relevance filter used to narrow the search.</div>
+          <div class="error-text">Please select a funding category.</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field" id="field-state">
+          <label for="state">State <span class="tag tag-soft">Soft</span></label>
+          <select id="state" name="state" required>
+            <option value="" disabled selected>Select state...</option>
+            <option value="IA">Iowa</option>
+            <option value="NE">Nebraska</option>
+            <option value="KS">Kansas</option>
+          </select>
+          <div class="hint">Feeds geographic-eligibility reasoning.</div>
+          <div class="error-text">Please select a state.</div>
+        </div>
+
+        <div class="field" id="field-county">
+          <label for="county">County <span class="tag tag-soft">Soft</span></label>
+          <input type="text" id="county" name="county" placeholder="e.g., Polk County" required>
+          <div class="hint">Used to derive rural/geographic designations.</div>
+          <div class="error-text">Please enter a county.</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field" id="field-population">
+          <label for="population">Community / service-area population <span class="tag tag-soft">Soft</span></label>
+          <input type="number" id="population" name="population" min="0" placeholder="e.g., 2400" required>
+          <div class="hint">Compared against each grant's rural/size threshold.</div>
+          <div class="error-text">Please enter a whole number.</div>
+        </div>
+
+        <div class="field" id="field-project_type">
+          <label for="project_type">Project type <span class="tag tag-soft">Soft</span></label>
+          <select id="project_type" name="project_type" required>
+            <option value="" disabled selected>Select project type...</option>
+            <option value="planning_feasibility">Planning / feasibility</option>
+            <option value="construction_infrastructure">Construction / infrastructure</option>
+            <option value="equipment_acquisition">Equipment / acquisition</option>
+            <option value="workforce_training">Workforce &amp; training</option>
+            <option value="technical_assistance">Technical assistance</option>
+            <option value="operating_support">Operating support</option>
+            <option value="business_development_lending">Business development / lending</option>
+            <option value="broadband_connectivity">Broadband / connectivity</option>
+          </select>
+          <div class="hint">Grants fund specific activity types.</div>
+          <div class="error-text">Please select a project type.</div>
+        </div>
+      </div>
+
+      <div class="field" id="field-project_narrative">
+        <label for="project_narrative">Project narrative <span class="tag tag-soft">Soft</span></label>
+        <textarea id="project_narrative" name="project_narrative" placeholder="What is the project, why does it matter, and who benefits?" required></textarea>
+        <div class="hint">The primary input for matching — describe what, why, and who benefits.</div>
+        <div class="error-text">Please describe the project (at least a sentence or two).</div>
+      </div>
+
+      <div class="grid-2">
+        <div class="field" id="field-amount_sought">
+          <label for="amount_sought">Amount sought (USD) <span class="tag tag-soft">Soft</span></label>
+          <input type="number" id="amount_sought" name="amount_sought" min="0" step="1000" placeholder="e.g., 75000" required>
+          <div class="hint">Scored against each grant's award floor/ceiling.</div>
+          <div class="error-text">Please enter an amount.</div>
+        </div>
+
+        <div class="field" id="field-match_funds_available">
+          <label for="match_funds_available">Matching funds available <span class="tag tag-soft">Soft</span></label>
+          <select id="match_funds_available" name="match_funds_available" required>
+            <option value="" disabled selected>Select a range...</option>
+            <option value="none">None</option>
+            <option value="lt_10">Less than 10%</option>
+            <option value="10_25">10–25%</option>
+            <option value="25_50">25–50%</option>
+            <option value="gt_50">More than 50%</option>
+          </select>
+          <div class="hint">Many grants require 20–50% cost-share.</div>
+          <div class="error-text">Please select a range.</div>
+        </div>
+      </div>
+
+      <div class="field" id="field-contact_email">
+        <label for="contact_email">Contact email <span class="tag tag-meta">Metadata</span></label>
+        <input type="email" id="contact_email" name="contact_email" placeholder="you@example.org" required>
+        <div class="hint">Used only to deliver your results.</div>
+        <div class="error-text">Please enter a valid email address.</div>
+      </div>
+
+      <div id="confirmBox" class="confirm-box">
+        <strong>Confirm before submitting:</strong>
+        <div id="confirmText" style="margin-top:6px;"></div>
+      </div>
+
+      <div class="submit-row">
+        <button type="submit" class="primary">Submit profile</button>
+        <button type="button" class="secondary" id="resetBtn">Clear form</button>
+        <span class="status-msg" id="statusMsg"></span>
+      </div>
+    </form>
+  </div>
+
+  <div class="card" id="resultsCard" style="display:none;">
+    <div class="card-header-row">
+      <h2>Grant Discovery Results</h2>
+      <span class="badge-count" id="resultsCount">0</span>
+    </div>
+    <div id="resultsStatus" class="hint" style="margin-bottom:14px;"></div>
+    <div id="resultsList"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header-row">
+      <h2>Stored Submissions</h2>
+      <span class="badge-count" id="submissionCount">0</span>
+    </div>
+    <div class="table-wrap">
+      <table id="submissionsTable">
+        <thead>
+          <tr>
+            <th>Submitted</th>
+            <th>Entity type</th>
+            <th>Category</th>
+            <th>State / County</th>
+            <th>Population</th>
+            <th>Project type</th>
+            <th>Amount sought</th>
+            <th>Match funds</th>
+            <th>Contact</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="submissionsBody">
+        </tbody>
+      </table>
+    </div>
+    <div class="empty-state" id="emptyState">No submissions yet. Fill out the form above to add one.</div>
+
+    <details style="margin-top:18px;">
+      <summary>View raw stored data (JSON)</summary>
+      <pre id="rawJson">[]</pre>
+    </details>
+  </div>
+
+</div>
+
+<script>
+  // In-memory store only — this is a mock/demo dashboard, not wired to a backend.
+  // Data lives for the life of this browser tab and is lost on reload, by design.
+  const submissions = [];
+
+
+  const form = document.getElementById('intakeForm');
+  const statusMsg = document.getElementById('statusMsg');
+  const confirmBox = document.getElementById('confirmBox');
+  const confirmText = document.getElementById('confirmText');
+
+  const ENTITY_LABELS = {
+    city_township_government: "City / township government",
+    county_government: "County government",
+    state_government: "State government",
+    tribal_government: "Federally recognized tribal government",
+    special_district: "Special district (utility / economic-dev authority)",
+    nonprofit_501c3: "Nonprofit (501(c)(3))",
+    nonprofit_other: "Nonprofit (other)",
+    small_business: "Small business",
+    other_for_profit: "Other for-profit",
+    cooperative: "Cooperative",
+    public_housing_authority: "Public housing authority",
+    educational_institution: "Educational institution",
+    individual: "Individual"
+  };
+  const CATEGORY_LABELS = {
+    agriculture: "Agriculture",
+    business_commerce: "Business & commerce",
+    community_development: "Community development",
+    energy: "Energy",
+    environment: "Environment",
+    housing: "Housing",
+    regional_development: "Regional development",
+    science_technology: "Science & technology",
+    transportation: "Transportation",
+    income_security_social_services: "Income security / social services",
+    disaster_prevention_relief: "Disaster prevention & relief"
+  };
+  const PROJECT_TYPE_LABELS = {
+    planning_feasibility: "Planning / feasibility",
+    construction_infrastructure: "Construction / infrastructure",
+    equipment_acquisition: "Equipment / acquisition",
+    workforce_training: "Workforce & training",
+    technical_assistance: "Technical assistance",
+    operating_support: "Operating support",
+    business_development_lending: "Business development / lending",
+    broadband_connectivity: "Broadband / connectivity"
+  };
+  const MATCH_FUNDS_LABELS = {
+    none: "None",
+    lt_10: "<10%",
+    "10_25": "10–25%",
+    "25_50": "25–50%",
+    gt_50: ">50%"
+  };
+
+  // --- grants.gov search2 / fetchOpportunity integration ---
+  // Codes verified empirically against the live API (2026-07-20) via applicantTypes /
+  // fundingActivityCategories labels returned by fetchOpportunity. No published code
+  // table exists in grants.gov docs, so these were derived from real responses.
+  const GRANTS_GOV_SEARCH_URL = "https://api.grants.gov/v1/api/search2";
+  const GRANTS_GOV_FETCH_URL = "https://api.grants.gov/v1/api/fetchOpportunity";
+
+  const ENTITY_TO_ELIGIBILITY = {
+    city_township_government: "02",
+    county_government: "01",
+    state_government: "00",
+    tribal_government: "07",
+    special_district: "04",
+    nonprofit_501c3: "12",
+    nonprofit_other: "13",
+    small_business: "23",
+    other_for_profit: "22",
+    cooperative: "25",              // no dedicated code; falls to "Others"
+    public_housing_authority: "08",
+    educational_institution: "06",  // public; private institutions are "20"
+    individual: "21"
+  };
+
+  const CATEGORY_TO_FUNDING_CODE = {
+    agriculture: "AG",
+    business_commerce: "BC",
+    community_development: "CD",
+    energy: "EN",
+    environment: "ENV",
+    housing: "HO",
+    regional_development: "RD",
+    science_technology: "ST",
+    transportation: "T",
+    income_security_social_services: "ISS",
+    disaster_prevention_relief: "DPR"
+  };
+
+  // Build a short keyword string from the narrative + project type to drive the
+  // keyword-only pass. Deliberately simple (top nouns/phrases) — this is a
+  // client-side mock of the keyword extraction your Cowork pipeline does with an LLM.
+  function extractKeywords(record) {
+    const projectTypeWords = {
+      planning_feasibility: "planning feasibility study",
+      construction_infrastructure: "construction infrastructure",
+      equipment_acquisition: "equipment acquisition",
+      workforce_training: "workforce training",
+      technical_assistance: "technical assistance",
+      operating_support: "operating support",
+      business_development_lending: "business development lending",
+      broadband_connectivity: "broadband connectivity"
+    };
+    const stopwords = new Set(["the","a","an","and","or","but","of","to","for","in","on","with",
+      "is","are","will","this","that","our","we","it","by","as","at","be","from","has","have"]);
+    const narrativeWords = (record.project_narrative || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g, " ")
+      .split(/\s+/)
+      .filter(w => w.length > 3 && !stopwords.has(w));
+    const freq = {};
+    narrativeWords.forEach(w => freq[w] = (freq[w] || 0) + 1);
+    const topWords = Object.keys(freq).sort((a,b) => freq[b]-freq[a]).slice(0, 6);
+    return (projectTypeWords[record.project_type] || "") + " " + topWords.join(" ");
+  }
+
+  // NOTE: Content-Type is deliberately "text/plain", not "application/json".
+  // "application/json" is not a CORS-safelisted content type, so the browser fires an
+  // OPTIONS preflight first — and the grants.gov API Gateway rejects OPTIONS with 403
+  // (verified from both file:// and http://localhost origins). "text/plain" makes this
+  // a CORS "simple request" with no preflight; the API parses the JSON body regardless,
+  // and its wildcard access-control-allow-origin header then permits the response.
+  async function callSearch2(payload) {
+    const res = await fetch(GRANTS_GOV_SEARCH_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error("search2 HTTP " + res.status);
+    const json = await res.json();
+    if (json.errorcode !== 0) throw new Error(json.msg || "search2 error");
+    return json.data;
+  }
+
+  async function callFetchOpportunity(opportunityId) {
+    const res = await fetch(GRANTS_GOV_FETCH_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain" },   // see note on callSearch2 — avoids CORS preflight
+      body: JSON.stringify({ opportunityId })
+    });
+    if (!res.ok) throw new Error("fetchOpportunity HTTP " + res.status);
+    const json = await res.json();
+    if (json.errorcode !== 0) throw new Error(json.msg || "fetchOpportunity error");
+    return json.data;
+  }
+
+  // Union prefilter: category-filtered pass + keyword-only pass, deduped by id.
+  // Mirrors the validated Cowork pipeline strategy (see project notes: union
+  // prefilter outperforms either single pass alone).
+  async function runGrantDiscovery(record) {
+    const eligCode = ENTITY_TO_ELIGIBILITY[record.entity_type];
+    const catCode = CATEGORY_TO_FUNDING_CODE[record.funding_category];
+    const keywords = extractKeywords(record);
+
+    const [categoryPass, keywordPass] = await Promise.all([
+      callSearch2({
+        rows: 25,
+        eligibilities: eligCode || "",
+        fundingCategories: catCode || "",
+        oppStatuses: "posted|forecasted"
+      }),
+      callSearch2({
+        rows: 25,
+        keyword: keywords.trim(),
+        oppStatuses: "posted|forecasted"
+      })
+    ]);
+
+    const byId = new Map();
+    (categoryPass.oppHits || []).forEach(h => byId.set(h.id, { ...h, source: "category" }));
+    (keywordPass.oppHits || []).forEach(h => {
+      if (byId.has(h.id)) {
+        byId.get(h.id).source = "both";
+      } else {
+        byId.set(h.id, { ...h, source: "keyword" });
+      }
+    });
+
+    const merged = Array.from(byId.values());
+    // Simple ranking: "both" (hit both passes) first, then category, then keyword;
+    // posted before forecasted; then by closest close date.
+    const sourceRank = { both: 0, category: 1, keyword: 2 };
+    merged.sort((a, b) => {
+      if (sourceRank[a.source] !== sourceRank[b.source]) return sourceRank[a.source] - sourceRank[b.source];
+      if (a.oppStatus !== b.oppStatus) return a.oppStatus === "posted" ? -1 : 1;
+      return 0;
+    });
+
+    return {
+      merged,
+      categoryHitCount: categoryPass.hitCount,
+      keywordHitCount: keywordPass.hitCount,
+      keywordsUsed: keywords.trim()
+    };
+  }
+
+  function fieldConfig() {
+    return [
+      { id: 'entity_type', validate: v => v !== '' },
+      { id: 'funding_category', validate: v => v !== '' },
+      { id: 'state', validate: v => v !== '' },
+      { id: 'county', validate: v => v.trim().length > 0 },
+      { id: 'population', validate: v => v !== '' && Number(v) >= 0 && Number.isFinite(Number(v)) },
+      { id: 'project_type', validate: v => v !== '' },
+      { id: 'project_narrative', validate: v => v.trim().length >= 10 },
+      { id: 'amount_sought', validate: v => v !== '' && Number(v) >= 0 },
+      { id: 'match_funds_available', validate: v => v !== '' },
+      { id: 'contact_email', validate: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) }
+    ];
+  }
+
+  function validateForm() {
+    let allValid = true;
+    fieldConfig().forEach(cfg => {
+      const el = document.getElementById(cfg.id);
+      const wrap = document.getElementById('field-' + cfg.id);
+      const ok = cfg.validate(el.value);
+      wrap.classList.toggle('invalid', !ok);
+      if (!ok) allValid = false;
+    });
+    return allValid;
+  }
+
+  // Clear invalid state as the user fixes a field
+  fieldConfig().forEach(cfg => {
+    const el = document.getElementById(cfg.id);
+    el.addEventListener('input', () => {
+      const wrap = document.getElementById('field-' + cfg.id);
+      if (cfg.validate(el.value)) wrap.classList.remove('invalid');
+    });
+    el.addEventListener('change', () => {
+      const wrap = document.getElementById('field-' + cfg.id);
+      if (cfg.validate(el.value)) wrap.classList.remove('invalid');
+    });
+  });
+
+  function renderTable() {
+    const body = document.getElementById('submissionsBody');
+    const emptyState = document.getElementById('emptyState');
+    const table = document.getElementById('submissionsTable');
+    const countBadge = document.getElementById('submissionCount');
+    const rawJson = document.getElementById('rawJson');
+
+    countBadge.textContent = submissions.length;
+    rawJson.textContent = JSON.stringify(submissions, null, 2);
+
+    if (submissions.length === 0) {
+      table.style.display = 'none';
+      emptyState.style.display = 'block';
+      return;
+    }
+    table.style.display = 'table';
+    emptyState.style.display = 'none';
+
+    body.innerHTML = '';
+    submissions.slice().reverse().forEach(s => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${esc(s.submitted_at)}</td>
+        <td>${esc(ENTITY_LABELS[s.entity_type] || s.entity_type)}</td>
+        <td>${esc(CATEGORY_LABELS[s.funding_category] || s.funding_category)}</td>
+        <td>${esc(s.county)}, ${esc(s.state)}</td>
+        <td>${esc(Number(s.population).toLocaleString())}</td>
+        <td>${esc(PROJECT_TYPE_LABELS[s.project_type] || s.project_type)}</td>
+        <td>$${esc(Number(s.amount_sought).toLocaleString())}</td>
+        <td>${esc(MATCH_FUNDS_LABELS[s.match_funds_available] || s.match_funds_available)}</td>
+        <td>${esc(s.contact_email)}</td>
+        <td><button class="action-link" data-id="${esc(s.id)}">Remove</button></td>
+      `;
+      body.appendChild(tr);
+    });
+
+    body.querySelectorAll('.action-link').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        const idx = submissions.findIndex(s => s.id === id);
+        if (idx !== -1) {
+          submissions.splice(idx, 1);
+          renderTable();
+        }
+      });
+    });
+  }
+
+  // --- XSS hardening ---
+  // Every value interpolated into innerHTML must pass through one of these.
+  // esc(): plain escape, for values typed by the user (county, email, etc.).
+  function esc(v) {
+    if (v === null || v === undefined) return '';
+    return String(v)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  // escApi(): for grants.gov strings, which arrive HTML-entity-encoded (e.g. "FY21 &ndash; FY23").
+  // A plain esc() would double-escape and display a literal "&ndash;". So decode entities first
+  // using the browser's own parser with textContent (which never executes markup), then escape.
+  // Net effect: entities render correctly, but any raw tag becomes inert text.
+  const _decoder = document.createElement('textarea');
+  function escApi(v) {
+    if (v === null || v === undefined) return '';
+    _decoder.innerHTML = String(v);          // parsed as markup, but textarea content is inert
+    const decoded = _decoder.value;          // .value gives the decoded plain text
+    _decoder.innerHTML = '';                 // don't retain content
+    return esc(decoded);
+  }
+
+  function formatDate(d) {
+    return d && d.trim() ? esc(d) : "—";
+  }
+
+  function renderResults(record, discovery, enrichedById) {
+    const card = document.getElementById('resultsCard');
+    const list = document.getElementById('resultsList');
+    const countEl = document.getElementById('resultsCount');
+    const statusEl = document.getElementById('resultsStatus');
+
+    card.style.display = 'block';
+    countEl.textContent = discovery.merged.length;
+    statusEl.innerHTML = `Category pass (entity type + funding category): <strong>${discovery.categoryHitCount}</strong> total hits. ` +
+      `Keyword pass (<em>${esc(discovery.keywordsUsed) || '—'}</em>): <strong>${discovery.keywordHitCount}</strong> total hits. ` +
+      `Showing top ${discovery.merged.length} after dedupe, live from grants.gov search2.`;
+
+    if (discovery.merged.length === 0) {
+      list.innerHTML = `<div class="warn-box">No live matches found for this profile's entity type / funding category / narrative. This may reflect a structural gap — some programs relevant to certain entity types (e.g. cooperatives, nonprofits) are administered off-platform (USDA RDApply, state agencies) and won't appear in grants.gov at all.</div>`;
+      return;
+    }
+
+    list.innerHTML = discovery.merged.map(h => {
+      const enriched = enrichedById.get(h.id);
+      const statusPill = h.oppStatus === 'posted'
+        ? '<span class="pill pill-posted">Posted</span>'
+        : '<span class="pill pill-forecasted">Forecasted</span>';
+      const sourcePill = h.source === 'both'
+        ? '<span class="pill pill-source-cat">Category + Keyword</span>'
+        : h.source === 'category'
+          ? '<span class="pill pill-source-cat">Category match</span>'
+          : '<span class="pill pill-source-kw">Keyword match</span>';
+      let amountRow = '';
+      if (enriched) {
+        const floor = enriched.awardFloor && enriched.awardFloor !== 'none' ? '$' + Number(enriched.awardFloor).toLocaleString() : 'n/a';
+        const ceiling = enriched.awardCeiling ? '$' + Number(enriched.awardCeiling).toLocaleString() : 'n/a';
+        amountRow = `<div class="amount-row">Award range: <strong>${esc(floor)}</strong> – <strong>${esc(ceiling)}</strong> · Est. total funding: ${enriched.estimatedFundingFormatted ? '$' + esc(enriched.estimatedFundingFormatted) : 'n/a'} · Cost-share required: ${enriched.costSharing ? 'Yes' : 'No'}</div>`;
+      }
+      return `
+        <div class="grant-result">
+          <h3>${escApi(h.title)}</h3>
+          <div class="meta-row">
+            <span><strong>${escApi(h.agency || h.agencyCode)}</strong></span>
+            <span>Opp #: ${escApi(h.number)}</span>
+            <span>Opens: ${formatDate(h.openDate)}</span>
+            <span>Closes: ${formatDate(h.closeDate)}</span>
+            ${statusPill}
+            ${sourcePill}
+          </div>
+          ${amountRow}
+        </div>`;
+    }).join('');
+  }
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    statusMsg.textContent = '';
+
+    if (!validateForm()) {
+      statusMsg.textContent = 'Please fix the highlighted fields.';
+      statusMsg.style.color = '#b3462c';
+      return;
+    }
+
+    const record = {
+      id: 'sub_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+      submitted_at: new Date().toLocaleString(),
+      entity_type: document.getElementById('entity_type').value,
+      funding_category: document.getElementById('funding_category').value,
+      state: document.getElementById('state').value,
+      county: document.getElementById('county').value.trim(),
+      population: document.getElementById('population').value,
+      project_type: document.getElementById('project_type').value,
+      project_narrative: document.getElementById('project_narrative').value.trim(),
+      amount_sought: document.getElementById('amount_sought').value,
+      match_funds_available: document.getElementById('match_funds_available').value,
+      contact_email: document.getElementById('contact_email').value.trim()
+    };
+
+    // Structured-pick confirmation (per hybrid intake decision): show what was captured
+    // for the two hard-filter fields before it's logged as final.
+    confirmBox.classList.add('show');
+    confirmText.innerHTML = `Entity type → <strong>${ENTITY_LABELS[record.entity_type]}</strong> &nbsp;|&nbsp; Funding category → <strong>${CATEGORY_LABELS[record.funding_category]}</strong><br>This profile is now stored below and grant discovery is running against grants.gov.`;
+
+    submissions.push(record);
+    renderTable();
+
+    statusMsg.style.color = '#3f7a5e';
+    statusMsg.textContent = 'Profile stored. Running live grant discovery…';
+
+    const card = document.getElementById('resultsCard');
+    card.style.display = 'block';
+    document.getElementById('resultsList').innerHTML = '<div class="spinner-text">Querying grants.gov (category pass + keyword pass)…</div>';
+    document.getElementById('resultsStatus').textContent = '';
+    document.getElementById('resultsCount').textContent = '…';
+
+    try {
+      const discovery = await runGrantDiscovery(record);
+
+      // Enrich the top few candidates with award amounts (fetchOpportunity is
+      // per-opportunity, so this is capped to keep it fast/polite to the API).
+      const ENRICH_LIMIT = 8;
+      const toEnrich = discovery.merged.slice(0, ENRICH_LIMIT);
+      const enrichedById = new Map();
+      await Promise.all(toEnrich.map(async h => {
+        try {
+          const data = await callFetchOpportunity(h.id);
+          const syn = data.synopsis || data.forecast || {};
+          enrichedById.set(h.id, syn);
+        } catch (err) {
+          // If a single enrichment call fails, skip amounts for that one — don't fail the whole run.
+        }
+      }));
+
+      renderResults(record, discovery, enrichedById);
+      record.discovery_result_count = discovery.merged.length;
+
+      statusMsg.style.color = '#3f7a5e';
+      statusMsg.textContent = `Profile stored. Found ${discovery.merged.length} live grants.gov match candidate(s).`;
+    } catch (err) {
+      document.getElementById('resultsList').innerHTML =
+        `<div class="warn-box">Grant discovery could not complete: ${err.message}. The profile is still stored above — you can retry the search later. If this persists, check your network connection or whether an ad-blocker / corporate proxy is blocking api.grants.gov.</div>`;
+      document.getElementById('resultsStatus').textContent = '';
+      document.getElementById('resultsCount').textContent = '0';
+      statusMsg.style.color = '#b3462c';
+      statusMsg.textContent = 'Profile stored, but the live search failed. See details below.';
+    }
+
+    renderTable();
+    form.reset();
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    form.reset();
+    fieldConfig().forEach(cfg => {
+      document.getElementById('field-' + cfg.id).classList.remove('invalid');
+    });
+    confirmBox.classList.remove('show');
+    statusMsg.textContent = '';
+  });
+
+  renderTable();
+</script>
+
+</body>
+</html>
